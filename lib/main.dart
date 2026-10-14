@@ -10,7 +10,9 @@ class SunStickersApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sun Stickers',
-      theme: ThemeData(colorSchemeSeed: AppColor.accent),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: Scaffold(
         body: Center(
           child: Column(
