@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:sun_stickers/data/_data.dart';
 
 /// Бизнес-логика варианта без библиотек. Обновление интерфейса вызывает
 /// StatefulWidget через setState после каждого действия.
-class StickerState {
+class StickerState extends ChangeNotifier {
   StickerState()
       : categories = AppData.categories,
         stickers = AppData.stickers,
@@ -22,23 +23,30 @@ class StickerState {
     stickersByCategory = category.type == StickerType.all
         ? List<Sticker>.from(stickers)
         : stickers.where((item) => item.type == category.type).toList();
+    notifyListeners();
   }
 
-  void onIncreaseQuantityTap(Sticker sticker) => sticker.quantity++;
+  void onIncreaseQuantityTap(Sticker sticker) {
+    sticker.quantity++;
+    notifyListeners();
+  }
 
   void onDecreaseQuantityTap(Sticker sticker) {
     if (sticker.quantity > 1) sticker.quantity--;
+    notifyListeners();
   }
 
   void onAddToCartTap(Sticker sticker) {
     sticker.cart = true;
     _syncCart();
+    notifyListeners();
   }
 
   void onRemoveFromCartTap(Sticker sticker) {
     sticker.cart = false;
     sticker.quantity = 1;
     _syncCart();
+    notifyListeners();
   }
 
   void onCheckOutTap() {
@@ -47,14 +55,19 @@ class StickerState {
       sticker.quantity = 1;
     }
     _syncCart();
+    notifyListeners();
   }
 
   void onAddRemoveFavoriteTap(Sticker sticker) {
     sticker.isFavorite = !sticker.isFavorite;
     favorite = stickers.where((item) => item.isFavorite).toList();
+    notifyListeners();
   }
 
-  void toggleTheme() => light = !light;
+  void toggleTheme() {
+    light = !light;
+    notifyListeners();
+  }
 
   String stickerPrice(Sticker sticker) => (sticker.quantity * sticker.price).toStringAsFixed(0);
 
